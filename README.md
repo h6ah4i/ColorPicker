@@ -40,6 +40,34 @@ Add the `ColorPreference` to your preference XML:
 </PreferenceScreen>
 ```
 
+Implement `onDisplayPreferenceDialog()` in your preference fragment:
+
+```java
+
+public class MyPreferenceFragment extends PreferenceFragmentCompat {
+
+  private static final String DIALOG_FRAGMENT_TAG =
+          "android.support.v7.preference.PreferenceFragment.DIALOG";
+
+  @Override
+  public void onDisplayPreferenceDialog(Preference preference) {
+    // check if dialog is already showing
+    if (getFragmentManager().findFragmentByTag(DIALOG_FRAGMENT_TAG) != null) {
+      return;
+    }
+
+    if (preference instanceof ColorPreference) {
+      final DialogFragment f = ((ColorPreference) preference).createDialog();
+      f.setTargetFragment(this, 0);
+      f.show(getFragmentManager(), DIALOG_FRAGMENT_TAG);
+    } else {
+      super.onDisplayPreferenceDialog(preference);
+    }
+  }
+}
+
+```
+
 You can add attributes to customize the `ColorPreference`:
 
 | name                | type      | documentation                                                                         |
@@ -52,21 +80,13 @@ You can add attributes to customize the `ColorPreference`:
 | cpv_showColorShades | boolean   | true to show different shades of the selected color                                   |
 | cpv_allowPresets    | boolean   | true to add a button to toggle to the custom color picker                             |
 | cpv_allowCustom     | boolean   | true to add a button to toggle to the presets color picker                            |
-| cpv_showDialog      | boolean   | true to let the ColorPreference handle showing the dialog                             |
 
-You can also show a `ColorPickerDialog` without using the `ColorPreference`:
 
-```java
-ColorPickerDialog.newBuilder().setColor(color).show(activity);
-```
-
-All the attributes above can also be applied to the `ColorPickerDialog`. The activity that shows the dialog should implement `ColorPickerDialogListener` to get a callback when a color is selected.
-
-For further doumentation about how to use the library, check the [demo](demo) app included in this project.
+For further documentation about how to use the library, check the [demo](demo) app included in this project.
 
 ## Download
 
-Download [the latest AAR](https://repo1.maven.org/maven2/com/jaredrummler/colorpicker/1.0.1/colorpicker-1.0.1.aar) or grab via Gradle:
+~~Download [the latest AAR](https://repo1.maven.org/maven2/com/jaredrummler/colorpicker/1.0.1/colorpicker-1.0.1.aar) or grab via Gradle~~
 
 ```groovy
 compile 'com.jaredrummler:colorpicker:1.0.1'
