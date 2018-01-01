@@ -18,20 +18,13 @@ package com.jaredrummler.android.colorpicker.demo;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
-import com.jaredrummler.android.colorpicker.ColorPickerDialog;
-import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
 
-public class MainActivity extends AppCompatActivity implements ColorPickerDialogListener {
-
-  // Give your color picker dialog unique IDs if you have multiple dialogs.
-  private static final int DIALOG_ID = 0;
+public class MainActivity extends AppCompatActivity {
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -49,15 +42,6 @@ public class MainActivity extends AppCompatActivity implements ColorPickerDialog
 
   @Override public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
-      case R.id.menu_color_picker_dialog:
-        ColorPickerDialog.newBuilder()
-            .setDialogType(ColorPickerDialog.TYPE_CUSTOM)
-            .setAllowPresets(false)
-            .setDialogId(DIALOG_ID)
-            .setColor(Color.BLACK)
-            .setShowAlphaSlider(true)
-            .show(this);
-        return true;
       case R.id.menu_github:
         try {
           startActivity(new Intent(Intent.ACTION_VIEW,
@@ -68,19 +52,5 @@ public class MainActivity extends AppCompatActivity implements ColorPickerDialog
     }
     return super.onOptionsItemSelected(item);
   }
-
-  @Override public void onColorSelected(int dialogId, int color) {
-    switch (dialogId) {
-      case DIALOG_ID:
-        // We got result from the dialog that is shown when clicking on the icon in the action bar.
-        Toast.makeText(MainActivity.this, "Selected Color: #" + Integer.toHexString(color), Toast.LENGTH_SHORT).show();
-        break;
-    }
-  }
-
-  @Override public void onDialogDismissed(int dialogId) {
-
-  }
-
 }
  

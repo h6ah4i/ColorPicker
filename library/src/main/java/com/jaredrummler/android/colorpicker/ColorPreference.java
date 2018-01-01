@@ -33,9 +33,7 @@ public class ColorPreference extends DialogPreference {
   private static final int SIZE_NORMAL = 0;
   private static final int SIZE_LARGE = 1;
 
-  private OnShowDialogListener onShowDialogListener;
   private int color = Color.BLACK;
-  private boolean showDialog;
   @ColorPickerDialog.DialogType
   private int dialogType;
   private int colorShape;
@@ -60,7 +58,6 @@ public class ColorPreference extends DialogPreference {
   private void init(AttributeSet attrs) {
     setPersistent(true);
     TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ColorPreference);
-    showDialog = a.getBoolean(R.styleable.ColorPreference_cpv_showDialog, true);
     //noinspection WrongConstant
     dialogType = a.getInt(R.styleable.ColorPreference_cpv_dialogType, ColorPickerDialog.TYPE_PRESETS);
     colorShape = a.getInt(R.styleable.ColorPreference_cpv_colorShape, ColorShape.CIRCLE);
@@ -139,32 +136,6 @@ public class ColorPreference extends DialogPreference {
    */
   public int[] getPresets() {
     return presets;
-  }
-
-  /**
-   * The listener used for showing the {@link ColorPickerDialog}.
-   * Call {@link #saveValue(int)} after the user chooses a color.
-   * If this is set then it is up to you to show the dialog.
-   *
-   * @param listener
-   *     The listener to show the dialog
-   */
-  public void setOnShowDialogListener(OnShowDialogListener listener) {
-    onShowDialogListener = listener;
-  }
-
-  /**
-   * The tag used for the {@link ColorPickerDialog}.
-   *
-   * @return The tag
-   */
-  public String getFragmentTag() {
-    return "color_" + getKey();
-  }
-
-  public interface OnShowDialogListener {
-
-    void onShowColorPickerDialog(String title, int currentColor);
   }
 
   public ColorPickerDialog createDialog() {

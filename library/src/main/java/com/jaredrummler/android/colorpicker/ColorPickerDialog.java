@@ -16,7 +16,6 @@
 
 package com.jaredrummler.android.colorpicker;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
@@ -55,14 +54,6 @@ import java.util.Locale;
 
 /**
  * <p>A dialog to pick a color.</p>
- * <p>
- * <p>The {@link Activity activity} that shows this dialog should implement {@link ColorPickerDialogListener}</p>
- * <p>
- * <p>Example usage:</p>
- * <p>
- * <pre>
- *   ColorPickerDialog.newBuilder().show(activity);
- * </pre>
  */
 public class ColorPickerDialog extends PreferenceDialogFragmentCompat implements OnTouchListener,
         ColorPickerView.OnColorChangedListener, TextWatcher {
@@ -70,7 +61,6 @@ public class ColorPickerDialog extends PreferenceDialogFragmentCompat implements
     private static final String SAVE_STATE_TYPE = "ColorPickerDialog.dialogType";
     private static final String SAVE_STATE_COLOR = "ColorPickerDialog.color";
 
-    private static final String ARG_ID = "id";
     private static final String ARG_TYPE = "dialogType";
     private static final String ARG_COLOR = "color";
     private static final String ARG_ALPHA = "alpha";
@@ -123,13 +113,11 @@ public class ColorPickerDialog extends PreferenceDialogFragmentCompat implements
         return new Builder();
     }
 
-    ColorPickerDialogListener colorPickerDialogListener;
     FrameLayout rootView;
     int[] presets;
     @ColorInt
     int color;
     int dialogType;
-    int dialogId;
     boolean showColorShades;
     int colorShape;
 
@@ -151,9 +139,6 @@ public class ColorPickerDialog extends PreferenceDialogFragmentCompat implements
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (colorPickerDialogListener == null && context instanceof ColorPickerDialogListener) {
-            colorPickerDialogListener = (ColorPickerDialogListener) context;
-        }
     }
 
     @Override
@@ -183,7 +168,7 @@ public class ColorPickerDialog extends PreferenceDialogFragmentCompat implements
         builder.setPositiveButton(selectedButtonStringRes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ColorPickerDialog.this.onColorSelected(dialogId, color);
+                ColorPickerDialog.this.onColorSelected(color);
             }
         });
 
@@ -250,9 +235,6 @@ public class ColorPickerDialog extends PreferenceDialogFragmentCompat implements
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        if (colorPickerDialogListener != null) {
-            colorPickerDialogListener.onDialogDismissed(dialogId);
-        }
     }
 
     @Override
@@ -271,7 +253,6 @@ public class ColorPickerDialog extends PreferenceDialogFragmentCompat implements
             dialogType = savedInstanceState.getInt(SAVE_STATE_TYPE);
         }
 
-        dialogId = getArguments().getInt(ARG_ID);
         showAlphaSlider = getArguments().getBoolean(ARG_ALPHA);
         showColorShades = getArguments().getBoolean(ARG_SHOW_COLOR_SHADES);
         colorShape = getArguments().getInt(ARG_COLOR_SHAPE);
@@ -285,14 +266,6 @@ public class ColorPickerDialog extends PreferenceDialogFragmentCompat implements
         super.onSaveInstanceState(outState);
     }
 
-    /**
-     * Set the callback
-     *
-     * @param colorPickerDialogListener The callback invoked when a color is selected or the dialog is dismissed.
-     */
-    public void setColorPickerDialogListener(ColorPickerDialogListener colorPickerDialogListener) {
-        this.colorPickerDialogListener = colorPickerDialogListener;
-    }
 
     // region Custom Picker
 
@@ -328,7 +301,7 @@ public class ColorPickerDialog extends PreferenceDialogFragmentCompat implements
             @Override
             public void onClick(View v) {
                 if (newColorPanel.getColor() == color) {
-                    ColorPickerDialog.this.onColorSelected(dialogId, color);
+                    ColorPickerDialog.this.onColorSelected(color);
                     dismiss();
                 }
             }
@@ -392,12 +365,8 @@ public class ColorPickerDialog extends PreferenceDialogFragmentCompat implements
         return (ColorPreference) getPreference();
     }
 
-    void onColorSelected(int dialogId, int color) {
+    void onColorSelected(int color) {
         getColorPreference().saveValue(color);
-
-        if (colorPickerDialogListener != null) {
-            colorPickerDialogListener.onColorSelected(dialogId, color);
-        }
     }
 
     @Override
@@ -497,7 +466,7 @@ public class ColorPickerDialog extends PreferenceDialogFragmentCompat implements
             @Override
             public void onColorSelected(int newColor) {
                 if (color == newColor) {
-                    ColorPickerDialog.this.onColorSelected(dialogId, color);
+                    ColorPickerDialog.this.onColorSelected(color);
                     dismiss();
                     return;
                 }
@@ -589,7 +558,7 @@ public class ColorPickerDialog extends PreferenceDialogFragmentCompat implements
                 @Override
                 public void onClick(View v) {
                     if (v.getTag() instanceof Boolean && (Boolean) v.getTag()) {
-                        ColorPickerDialog.this.onColorSelected(dialogId, ColorPickerDialog.this.color);
+                        ColorPickerDialog.this.onColorSelected(ColorPickerDialog.this.color);
                         dismiss();
                         return; // already selected
                     }
@@ -784,7 +753,6 @@ public class ColorPickerDialog extends PreferenceDialogFragmentCompat implements
         int[] presets = MATERIAL_COLORS;
         @ColorInt
         int color = Color.BLACK;
-        int dialogId = 0;
         boolean showAlphaSlider = false;
         boolean allowPresets = true;
         boolean allowCustom = true;
@@ -879,17 +847,6 @@ public class ColorPickerDialog extends PreferenceDialogFragmentCompat implements
         }
 
         /**
-         * Set the dialog id used for callbacks
-         *
-         * @param dialogId The id that is sent back to the {@link ColorPickerDialogListener}.
-         * @return This builder object for chaining method calls
-         */
-        public Builder setDialogId(int dialogId) {
-            this.dialogId = dialogId;
-            return this;
-        }
-
-        /**
          * Show the alpha slider
          *
          * @param showAlphaSlider {@code true} to show the alpha slider. Currently only supported with the {@link ColorPickerView}.
@@ -954,7 +911,6 @@ public class ColorPickerDialog extends PreferenceDialogFragmentCompat implements
             ColorPickerDialog dialog = new ColorPickerDialog();
             Bundle args = new Bundle();
             args.putString(ARG_KEY, preferenceKey);
-            args.putInt(ARG_ID, dialogId);
             args.putInt(ARG_TYPE, dialogType);
             args.putInt(ARG_COLOR, color);
             args.putIntArray(ARG_PRESETS, presets);

@@ -42,7 +42,7 @@ public class DemoFragment extends PreferenceFragmentCompat {
     }
 
     if (preference instanceof ColorPreference) {
-      final DialogFragment f = ((ColorPreference)preference).createDialog();
+      final DialogFragment f = ((ColorPreference) preference).createDialog();
       f.setTargetFragment(this, 0);
       f.show(getFragmentManager(), DIALOG_FRAGMENT_TAG);
     } else {

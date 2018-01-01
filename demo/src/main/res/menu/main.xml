@@ -22,12 +22,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
   <item
-      android:id="@+id/menu_color_picker_dialog"
-      android:icon="@drawable/ic_palette_white_24dp"
-      android:title="@string/color_picker_dialog"
-      app:showAsAction="always"
-      tools:ignore="AlwaysShowAction"/>
-  <item
       android:id="@+id/menu_github"
       android:icon="@drawable/ic_github_white_24dp"
       android:title="@string/github"
