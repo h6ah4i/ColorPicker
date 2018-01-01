@@ -16,20 +16,19 @@
 
 package com.jaredrummler.android.colorpicker;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.preference.Preference;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.v7.preference.DialogPreference;
+import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
-import android.view.View;
 
 /**
  * A Preference to select a color
  */
-public class ColorPreference extends Preference implements ColorPickerDialogListener {
+public class ColorPreference extends DialogPreference {
 
   private static final int SIZE_NORMAL = 0;
   private static final int SIZE_LARGE = 1;
@@ -88,45 +87,11 @@ public class ColorPreference extends Preference implements ColorPickerDialogList
     a.recycle();
   }
 
-  @Override protected void onClick() {
-    super.onClick();
-    if (onShowDialogListener != null) {
-      onShowDialogListener.onShowColorPickerDialog((String) getTitle(), color);
-    } else if (showDialog) {
-      ColorPickerDialog dialog = ColorPickerDialog.newBuilder()
-          .setDialogType(dialogType)
-          .setDialogTitle(dialogTitle)
-          .setColorShape(colorShape)
-          .setPresets(presets)
-          .setAllowPresets(allowPresets)
-          .setAllowCustom(allowCustom)
-          .setShowAlphaSlider(showAlphaSlider)
-          .setShowColorShades(showColorShades)
-          .setColor(color)
-          .create();
-      dialog.setColorPickerDialogListener(ColorPreference.this);
-      Activity activity = (Activity) getContext();
-      dialog.show(activity.getFragmentManager(), getFragmentTag());
-    }
-  }
+  @Override
+  public void onBindViewHolder(PreferenceViewHolder holder) {
+    super.onBindViewHolder(holder);
 
-  @Override protected void onAttachedToActivity() {
-    super.onAttachedToActivity();
-
-    if (showDialog) {
-      Activity activity = (Activity) getContext();
-      ColorPickerDialog fragment =
-          (ColorPickerDialog) activity.getFragmentManager().findFragmentByTag(getFragmentTag());
-      if (fragment != null) {
-        // re-bind preference to fragment
-        fragment.setColorPickerDialogListener(this);
-      }
-    }
-  }
-
-  @Override protected void onBindView(View view) {
-    super.onBindView(view);
-    ColorPanelView preview = (ColorPanelView) view.findViewById(R.id.cpv_preference_preview_color_panel);
+    ColorPanelView preview = (ColorPanelView) holder.findViewById(R.id.cpv_preference_preview_color_panel);
     if (preview != null) {
       preview.setColor(color);
     }
@@ -143,14 +108,6 @@ public class ColorPreference extends Preference implements ColorPickerDialogList
 
   @Override protected Object onGetDefaultValue(TypedArray a, int index) {
     return a.getInteger(index, Color.BLACK);
-  }
-
-  @Override public void onColorSelected(int dialogId, @ColorInt int color) {
-    saveValue(color);
-  }
-
-  @Override public void onDialogDismissed(int dialogId) {
-    // no-op
   }
 
   /**
@@ -210,4 +167,19 @@ public class ColorPreference extends Preference implements ColorPickerDialogList
     void onShowColorPickerDialog(String title, int currentColor);
   }
 
+  public ColorPickerDialog createDialog() {
+    ColorPickerDialog dialog = ColorPickerDialog.newBuilder()
+      .setPreferenceKey(getKey())
+      .setDialogType(dialogType)
+      .setDialogTitle(dialogTitle)
+      .setColorShape(colorShape)
+      .setPresets(presets)
+      .setAllowPresets(allowPresets)
+      .setAllowCustom(allowCustom)
+      .setShowAlphaSlider(showAlphaSlider)
+      .setShowColorShades(showColorShades)
+      .setColor(color)
+      .create();
+    return dialog;
+  }
 }

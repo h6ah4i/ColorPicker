@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -28,7 +29,7 @@ import com.jaredrummler.android.colorpicker.ColorPanelView;
 import com.jaredrummler.android.colorpicker.ColorPickerView;
 import com.jaredrummler.android.colorpicker.ColorPickerView.OnColorChangedListener;
 
-public class ColorPickerActivity extends Activity implements OnColorChangedListener, View.OnClickListener {
+public class ColorPickerActivity extends AppCompatActivity implements OnColorChangedListener, View.OnClickListener {
 
   private ColorPickerView colorPickerView;
   private ColorPanelView newColorPanelView;

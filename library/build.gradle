@@ -17,6 +17,7 @@ android {
 
 dependencies {
   compile 'com.android.support:appcompat-v7:27.0.2'
+  compile 'com.android.support:preference-v7:27.0.2'
 }
 
 apply plugin: 'com.getkeepsafe.dexcount'
