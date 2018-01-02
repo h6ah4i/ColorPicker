@@ -49,6 +49,8 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.Arrays;
 import java.util.Locale;
 
@@ -938,6 +940,7 @@ public class ColorPickerDialog extends PreferenceDialogFragmentCompat implements
 
     }
 
+    @Retention(RetentionPolicy.SOURCE)
     @IntDef({TYPE_CUSTOM, TYPE_PRESETS})
     public @interface DialogType {
 
