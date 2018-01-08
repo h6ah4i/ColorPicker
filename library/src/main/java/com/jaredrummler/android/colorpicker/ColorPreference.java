@@ -104,7 +104,16 @@ public class ColorPreference extends DialogPreference {
   }
 
   @Override protected Object onGetDefaultValue(TypedArray a, int index) {
-    return a.getInteger(index, Color.BLACK);
+    final int defValue = Color.BLACK;
+    final String strValue = a.getString(index);
+
+    if (strValue == null || strValue.isEmpty()) {
+      return defValue;
+    } else if (strValue.toLowerCase().startsWith("0x")) {
+      return a.getInteger(index, defValue);
+    } else {
+      return Color.parseColor(strValue);
+    }
   }
 
   /**
