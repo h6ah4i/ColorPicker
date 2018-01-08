@@ -12,6 +12,8 @@ Yet another open source color picker for Android. So, why should you use this co
 
 The original ColorPickerView was written by [Daniel Nilsson](https://github.com/danielnilsson9/color-picker-view).
 
+**This project is a forked version of the [Jared Rummler's ColorPicker](https://github.com/jaredrummler/ColorPicker) library. This library uses *v7 Preference Support Library* instead of the native Android's Preference classes.**
+
 ## Screenshots
 ![GIF](art/demo.gif)
 &nbsp;&nbsp;
@@ -86,20 +88,26 @@ For further documentation about how to use the library, check the [demo](demo) a
 
 ## Download
 
-~~Download [the latest AAR](https://repo1.maven.org/maven2/com/jaredrummler/colorpicker/1.0.1/colorpicker-1.0.1.aar) or grab via Gradle~~
+Add it in your root `build.gradle` at the end of repositories:
 
 ```groovy
-compile 'com.jaredrummler:colorpicker:1.0.1'
+  allprojects {
+    repositories {
+      ...
+      maven { url 'https://jitpack.io' }
+    }
+  }
 ```
-or Maven:
-```xml
-<dependency>
-  <groupId>com.jaredrummler</groupId>
-  <artifactId>colorpicker</artifactId>
-  <version>1.0.1</version>
-  <type>aar</type>
-</dependency>
+
+Step 2. Add the dependency
+
+
+```groovy
+  dependencies {
+          compile 'com.github.h6ah4i:ColorPicker:-SNAPSHOT'
+  }
 ```
+
 
 ## License
 
