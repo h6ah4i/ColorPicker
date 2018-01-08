@@ -32,7 +32,6 @@
     <attr name="cpv_showColorShades" format="boolean|reference"/>
     <attr name="cpv_allowPresets" format="boolean|reference"/>
     <attr name="cpv_allowCustom" format="boolean|reference"/>
-    <attr name="cpv_showDialog" format="boolean|reference"/>
   </declare-styleable>
 
 </resources>
