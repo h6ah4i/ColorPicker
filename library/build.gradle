@@ -22,4 +22,13 @@ dependencies {
   implementation 'com.android.support:preference-v7:27.0.2'
 }
 
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+artifacts {
+    archives sourcesJar
+}
+
 apply plugin: 'com.getkeepsafe.dexcount'
