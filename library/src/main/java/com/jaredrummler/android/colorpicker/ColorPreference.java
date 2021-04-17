@@ -21,6 +21,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.preference.DialogPreference;
 import androidx.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
@@ -44,6 +45,8 @@ public class ColorPreference extends DialogPreference {
   private int previewSize;
   private int[] presets;
   private int dialogTitle;
+
+  private Object mDefaultValue;
 
   public ColorPreference(Context context, AttributeSet attrs) {
     super(context, attrs);
@@ -94,16 +97,25 @@ public class ColorPreference extends DialogPreference {
     }
   }
 
-  @Override protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
-    if (restorePersistedValue) {
-      color = getPersistedInt(0xFF000000);
-    } else {
+  @Override
+  protected void onSetInitialValue(@Nullable Object defaultValue) {
+    if (defaultValue == null) {
+      defaultValue = mDefaultValue;
+    }
+
+    if (defaultValue instanceof Integer) {
       color = (Integer) defaultValue;
       persistInt(color);
     }
   }
 
   @Override protected Object onGetDefaultValue(TypedArray a, int index) {
+    // [workaround] dispatchSetInitialValue() is broken, so need to store default value for myself.
+    mDefaultValue = onGetDefaultValueInternal(a, index);
+    return mDefaultValue;
+  }
+
+  private Object onGetDefaultValueInternal(TypedArray a, int index) {
     final int defValue = Color.BLACK;
     final String strValue = a.getString(index);
 
