@@ -2,13 +2,12 @@ apply plugin: 'com.android.library'
 //apply plugin: 'com.github.dcendents.android-maven'
 
 android {
-  compileSdkVersion 28
-  buildToolsVersion "28.0.3"
+  compileSdkVersion 30
   resourcePrefix "cpv_"
 
   defaultConfig {
     minSdkVersion 14
-    targetSdkVersion 28
+    targetSdkVersion 30
   }
 
   lintOptions {
@@ -30,4 +29,4 @@ artifacts {
     archives sourcesJar
 }
 
-apply plugin: 'com.getkeepsafe.dexcount'
+//apply plugin: 'com.getkeepsafe.dexcount'
